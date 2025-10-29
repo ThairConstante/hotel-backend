@@ -17,7 +17,11 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-origins = ["*"]
+origins = [
+    "https://hotel-frontend-sjps.onrender.com",  # tu frontend desplegado en Render
+    "http://127.0.0.1:5500",                     # opcional: pruebas locales
+    "http://localhost:5500"                      # opcional: VSCode Live Server
+]
 
 app.add_middleware(
     CORSMiddleware,
