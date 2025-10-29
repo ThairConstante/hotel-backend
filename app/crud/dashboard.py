@@ -21,14 +21,21 @@ def get_dashboard_counts(db: Session):
     }
 
 def get_sales_by_month(db: Session):
+    month_expr = func.date_format(Reservation.Check_in_date, "%m")
+    month_name_expr = func.date_format(Reservation.Check_in_date, "%M")
+
     results = (
         db.query(
-            func.date_format(Reservation.Check_in_date, "%m").label("month"),
+            month_expr.label("month"),
+            month_name_expr.label("month_name"),
             func.sum(Reservation.Total).label("total_sales")
         )
-        .group_by(func.date_format(Reservation.Check_in_date, "%M"))
-        .order_by(func.min(Reservation.Check_in_date))  # asegura orden cronológico
+        .group_by(month_expr, month_name_expr)
+        .order_by(month_expr)
         .all()
     )
 
-    return [{"month": r.month, "total_sales": float(r.total_sales)} for r in results]
+    return [
+        {"month": r.month_name, "total_sales": float(r.total_sales)}
+        for r in results
+    ]
