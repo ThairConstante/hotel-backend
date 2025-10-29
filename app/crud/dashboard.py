@@ -26,7 +26,7 @@ def get_sales_by_month(db: Session):
 
     results = (
         db.query(
-            month_expr.label("month"),
+            month_expr.label("month_num"),
             month_name_expr.label("month_name"),
             func.sum(Reservation.Total).label("total_sales")
         )
